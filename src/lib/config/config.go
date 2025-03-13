@@ -31,6 +31,9 @@ var defaultConfig = Config{
 		Carbon: carbonConfig{
 			Locale: "en",
 		},
+		Postgres: postgresConfig{
+		    SSLMode: "disable",
+		},
 	},
 }
 
@@ -63,14 +66,15 @@ type postgresConfigCommon struct {
 	MaxOpenConnections int    `yaml:"max_open_connections"`
 }
 
-func (c postgresConfigCommon) DSN() string {
+func (c postgresConfig) DSN() string {
 	return fmt.Sprintf(
-		"postgres://%s:%s@%s:%d/%s?sslmode=disable",
+		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
         	url.QueryEscape(c.User),
         	url.QueryEscape(c.Password),
         	c.Host,
         	c.Port,
         	url.QueryEscape(c.Database),
+        	url.QueryEscape(c.SSLMode),
     	)
 }
 
